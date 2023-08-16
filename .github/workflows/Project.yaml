@@ -1,0 +1,31 @@
+name: Node.js CI
+
+on: [push]
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_kEY_V }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETS_V }} 
+  
+jobs:
+  build:
+    name: Project Next
+    runs-on: ubuntu-latest
+
+    strategy:
+        matrix:
+            node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
+
+
+
+
